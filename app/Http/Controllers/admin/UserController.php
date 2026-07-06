@@ -15,12 +15,7 @@ class UserController extends Controller
      }
 
     public function userListView(){
-        $userData = User::when(request('searchKey'), function($query) {
-            $searchKey = '%' . request('searchKey') . '%';
-            return $query->where('name', 'like', $searchKey)
-                        ->orWhere('email', 'like', $searchKey)
-                        ->orWhere('role', 'like', $searchKey);
-        })->orderBy('created_at', 'asc')->paginate(10);
+        $userData = User::orderBy('created_at', 'desc')->get();
         return view('admin.management.userlist',compact('userData'));
     }
 
@@ -64,6 +59,7 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'role' => $request->role,
             ]);
 
             Alert::success('Success', 'User created successfully!');
@@ -78,13 +74,20 @@ class UserController extends Controller
     }
 
     public function userEdit(Request $request){
-       $request->validate([
+       $validationRules = [
             'name' => 'required|min:1|max:199|unique:users,name,' . $request->id,
             'email' => 'required|email|unique:users,email,' . $request->id,
             'phone' => 'nullable|numeric',
             'address' => 'nullable|string|max:255',
             'image' => 'file|mimes:jpg,jpeg,png,webp,svg',
-        ], [
+        ];
+
+        // Only admins can change roles
+        if (auth()->user()->role == 'Admin' && $request->has('role')) {
+            $validationRules['role'] = 'required|in:Admin,User';
+        }
+
+       $request->validate($validationRules, [
             'name.required' => 'ဖြည့်စွက်ရန် လိုအပ်ပါသည်',
             'email.required' => 'ဖြည့်စွက်ရန် လိုအပ်ပါသည်',
             'image.file' => 'ဓာတ်ပုံဖိုင်တစ်ခုသာ ရွေးချယ်ပါ',
@@ -93,6 +96,11 @@ class UserController extends Controller
                 'phone' => $request->phone,
                 'address' => $request->address,
               ];
+
+        // Only admins can update roles
+        if (auth()->user()->role == 'Admin' && $request->has('role')) {
+            $data['role'] = $request->role;
+        }
 
         // Get old image name from DB
         $oldImageName = User::where('id', $request->id)->value('image');
@@ -126,6 +134,7 @@ class UserController extends Controller
             'password'=>'required|min:8|max:16',
             'confirmPassword'=>'required|same:password|min:8|max:16',
             'image' => 'file|mimes:jpg,jpeg,png,webp,svg',
+            'role' => 'required|in:Admin,User',
             // 'phone'=>'numeric',
         ];
 

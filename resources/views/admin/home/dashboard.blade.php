@@ -6,8 +6,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        
     </div>
 
     <!-- Content Row -->
@@ -19,10 +18,10 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <a href='{{ route('saleListView') }}'
+                            <a href="{{ route('saleListView') }}"
                                 class="text-xs font-weight-bold text-primary text-uppercase mb-1 text-decoration-none">
                                 Earnings (Daily)</a>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($dailyEarnings, 2) }}
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($dailyEarnings, 0) }}
                                 MMK</div>
                         </div>
                         <div class="col-auto">
@@ -43,7 +42,7 @@
                                 class="text-xs font-weight-bold text-primary text-uppercase mb-1 text-decoration-none">
                                 Earnings (Monthly)</a>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ number_format(array_sum($monthlyEarnings), 2) }} MMK
+                                {{ number_format(array_sum($monthlyEarnings), 0) }} MMK
                             </div>
                         </div>
                         <div class="col-auto">
@@ -63,7 +62,7 @@
                             <a href="#"
                                 class="text-xs font-weight-bold text-success text-uppercase mb-1 text-decoration-none">
                                 Earnings (Annual)</a>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($annualEarnings, 2) }}
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($annualEarnings, 0) }}
                                 MMK</div>
                         </div>
                         <div class="col-auto">
@@ -80,7 +79,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <a href='{{ route('userListView')}}'
+                            <a href="{{ route('userListView') }}"
                                 class="text-xs font-weight-bold text-info text-uppercase mb-1 text-decoration-none">
                                 Total User</a>
                             <div class="row no-gutters align-items-center">
@@ -97,6 +96,27 @@
                         </div>
                         <div class="col-auto">
                             <i class="fa-solid fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Registration Requests Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <a href="{{ route('registration.requests.index', ['status' => 'pending']) }}"
+                                class="text-xs font-weight-bold text-warning text-uppercase mb-1 text-decoration-none">
+                                Pending Requests</a>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ \App\Models\RegistrationRequest::where('status', 'pending')->count() }}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-user-clock fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -206,7 +226,7 @@
                                 stepSize: 20000000,
                                 padding: 10,
                                 callback: function(value) {
-                                    return Math.round(value).toLocaleString() + ' MMK';
+                                    return number_format(Math.round(value), 0) + ' MMK';
                                 }
                             },
                             gridLines: {
@@ -238,7 +258,7 @@
                         callbacks: {
                             label: function(tooltipItem, chart) {
                                 var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                return datasetLabel + ': ' + Math.round(tooltipItem.yLabel).toLocaleString() + ' MMK';
+                                return datasetLabel + ': ' + number_format(Math.round(tooltipItem.yLabel), 0) + ' MMK';
                             }
                         }
                     }
@@ -280,7 +300,7 @@
                                 stepSize: 10000000,
                                 padding: 10,
                                 callback: function(value) {
-                                    return Math.round(value).toLocaleString() + ' MMK';
+                                    return number_format(Math.round(value), 0) + ' MMK';
                                 }
                             },
                             gridLines: {
@@ -308,7 +328,7 @@
                         caretPadding: 10,
                         callbacks: {
                             label: function(tooltipItem, chart) {
-                                return 'Revenue: ' + Math.round(tooltipItem.yLabel).toLocaleString() + ' MMK';
+                                return 'Revenue: ' + number_format(Math.round(tooltipItem.yLabel), 0) + ' MMK';
                             }
                         }
                     }

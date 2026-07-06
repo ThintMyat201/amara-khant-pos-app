@@ -7,10 +7,29 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\AdminProfileController;
 use App\Http\Controllers\admin\ChangePasswordController;
+use App\Http\Controllers\admin\RegistrationRequestController;
+use App\Http\Controllers\admin\NotificationController;
 
 
 
 Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'adminMiddleware', 'verified']], function(){
+    
+    // Registration Request Management
+    Route::group(['prefix'=>'registration'],function(){
+        Route::get('requests', [RegistrationRequestController::class, 'index'])->name('registration.requests.index');
+        Route::get('requests/{id}', [RegistrationRequestController::class, 'show'])->name('registration.requests.show');
+        Route::post('requests/{id}/approve', [RegistrationRequestController::class, 'approve'])->name('registration.requests.approve');
+        Route::post('requests/{id}/reject', [RegistrationRequestController::class, 'reject'])->name('registration.requests.reject');
+        Route::delete('requests/{id}', [RegistrationRequestController::class, 'destroy'])->name('registration.requests.destroy');
+    });
+
+    // Notification Management
+    Route::group(['prefix'=>'notifications'],function(){
+        Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::post('/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+        Route::get('/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
+    });
     
     // Report Generation
     Route::get('/generate-report', [App\Http\Controllers\ReportController::class, 'generateReport'])->name('generateReport');

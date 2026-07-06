@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(error_reporting() & ~E_DEPRECATED);
+
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Foundation\Configuration\Exceptions;

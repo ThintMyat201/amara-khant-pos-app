@@ -27,15 +27,8 @@ class SaleController extends Controller
     {
         $product = product::select('products.id','products.name','products.price','products.description','products.image','products.stock','products.category_id','categories.name as category_name')
                 ->leftJoin('categories','products.category_id','categories.id')
-                ->when(request('searchKey'), function($query){
-                    $query->where(function($q) {
-                        $searchKey = '%' . request('searchKey') . '%';
-                        $q->where('products.name', 'like', $searchKey)
-                          ->orWhere('categories.name', 'like', $searchKey);
-                    });
-                })
                 ->orderBy('products.created_at','desc')
-                ->paginate(5);
+                ->get();
 
         // Fetch cart for current user
         $cart = cart::where('user_id', Auth::id())->get();
@@ -124,9 +117,9 @@ class SaleController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    public function saleListView()
+    public function saleListView(Request $request)
     {
-        $sessions = sale::select(
+        $query = sale::select(
                 'products.name as product_name',
                 'products.price',
                 'sales.quantity',
@@ -135,10 +128,40 @@ class SaleController extends Controller
                 'sales.created_at'
             )
             ->join('products', 'sales.product_id', '=', 'products.id')
-            ->orderBy('sales.created_at', 'desc')
-            ->get();
+            ->orderBy('sales.created_at', 'desc');
 
-        return view('admin.sale.salelist', compact('sessions'));
+        // Apply filters based on request
+        if ($request->has('filter')) {
+            switch ($request->filter) {
+                case 'today':
+                    $query->whereDate('sales.created_at', today());
+                    break;
+                case 'month':
+                    $query->whereMonth('sales.created_at', now()->month)
+                          ->whereYear('sales.created_at', now()->year);
+                    break;
+                case 'year':
+                    $query->whereYear('sales.created_at', now()->year);
+                    break;
+            }
+        }
+
+        // Apply custom date range filter
+        if ($request->has('start_date') && $request->start_date) {
+            $query->whereDate('sales.created_at', '>=', $request->start_date);
+        }
+        if ($request->has('end_date') && $request->end_date) {
+            $query->whereDate('sales.created_at', '<=', $request->end_date);
+        }
+
+        $sessions = $query->get();
+
+        // Calculate summary statistics
+        $totalSales = $sessions->sum('total');
+        $totalQuantity = $sessions->sum('quantity');
+        $transactionCount = $sessions->count();
+
+        return view('admin.sale.salelist', compact('sessions', 'totalSales', 'totalQuantity', 'transactionCount'));
     }
 
     public function openStore()

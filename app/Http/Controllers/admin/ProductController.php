@@ -22,11 +22,8 @@ class ProductController extends Controller
                 ->when( $action=='lowAmt',function($query){
                     $query->where('products.stock','<=',3);
                 })
-                ->when( request('searchKey'),function($query){
-                   $query->whereAny(['products.name','categories.name'],'like','%'.request('searchKey').'%');
-                })
                 ->orderBy('products.created_at','desc')
-                ->paginate(5);
+                ->get();
 
         return view('admin.product.productlist',compact('product'));
     }

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-8 offset-md-2 card p-3 shadow-sm rounded">
 
@@ -87,6 +87,18 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
 
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select name="role" class="form-control @error('role') is-invalid @enderror">
+                                <option value="">Select Role...</option>
+                                <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">

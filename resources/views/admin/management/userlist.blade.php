@@ -1,34 +1,33 @@
 @extends('layouts.master')
 @section('content')
 
-    <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between my-2">
-            <a href="{{ route('userCreateView') }}">
-                <button class="btn btn-sm btn-secondary mb-2 mb-md-0">Create</button>
-            </a>
-            <div class="">
-                <form action="" method="get">
-                    <div class="input-group">
-                        <input type="text" name="searchKey" value="{{ request('searchKey') }}" class="form-control"
-                            placeholder="Enter Search Key...">
-                        <button type="submit" class="btn bg-dark text-white"> <i
-                                class="fa-solid fa-magnifying-glass"></i> </button>
-                    </div>
-                </form>
-            </div>
+    <div class="container-fluid">
+        
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800 font-weight-bold">
+                <i class="fas fa-users text-primary"></i> User Management
+            </h1>
         </div>
-        <div class="row mt-3">
-            <div class="col-sm-12">
+
+        <!-- User List Card -->
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-header py-3 bg-gradient-primary">
+                <h6 class="m-0 font-weight-bold text-white">
+                    <i class="fas fa-list"></i> User List
+                </h6>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover shadow-sm rounded overflow-hidden">
-                        <thead class="bg-primary text-white">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Created Date</th>
-                                <th></th>
+                    <table class="table table-bordered table-hover" id="userTable">
+                        <thead class="bg-light">
+                            <tr class="text-center">
+                                <th class="border font-weight-bold text-primary">ID</th>
+                                <th class="border font-weight-bold text-primary">Name</th>
+                                <th class="border font-weight-bold text-primary">Email</th>
+                                <th class="border font-weight-bold text-primary">Role</th>
+                                <th class="border font-weight-bold text-primary">Created Date</th>
+                                <th class="border font-weight-bold text-primary">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,30 +35,27 @@
 
                                 @foreach ($userData as $item)
                                     <tr>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width:60px;">{{ $item->id }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width:120px;">{{ $item->name }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width:160px;">{{ $item->email }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width:80px;">{{ $item->role }}</span>
+                                        <td class="border text-center">{{ $item->id }}</td>
+                                        <td class="border">{{ $item->name }}</td>
+                                        <td class="border">{{ $item->email }}</td>
+                                        <td class="border text-center">
                                             @if ($item->role === 'Admin')
-                                                 <span  class="btn btn-sm bg-danger text-white rounded shadow-sm ms-2"></span>
+                                                <span class="badge badge-danger px-3 py-2">
+                                                    <i class="fas fa-user-shield"></i> Admin
+                                                </span>
                                             @elseif($item->role === 'User')
-                                                 <span  class="btn btn-sm bg-primary text-white rounded shadow-sm ms-2"></span>
+                                                <span class="badge badge-primary px-3 py-2">
+                                                    <i class="fas fa-user"></i> User
+                                                </span>
+                                            @else
+                                                <span class="badge badge-secondary px-3 py-2">{{ $item->role }}</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width:100px;">{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</span>
-                                        </td>
-                                        <td>
+                                        <td class="border text-center">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</td>
+                                        <td class="border text-center">
                                             <a href="{{ route('userDetailView', $item->id) }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="fa-solid fa-eye"></i>
+                                                class="btn btn-sm btn-outline-primary shadow-sm">
+                                                <i class="fa-solid fa-eye"></i> View
                                             </a>
                                         </td>
                                     </tr>
@@ -68,21 +64,49 @@
 
                             @else
                                 <tr>
-                                    <td colspan="7">
-                                        <h5 class="text-muted text-center">There is no user</h5>
+                                    <td colspan="6" class="border text-center py-5">
+                                        <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
+                                        <h5 class="text-muted">There is no user</h5>
                                     </td>
                                 </tr>
                             @endif
                         </tbody>
                     </table>
                 </div>
-
-                <div class="d-flex justify-content-end mt-3">
-                    {{ $userData->withQueryString()->links() }}
-                </div>
-
             </div>
         </div>
+
     </div>
 
+@endsection
+
+@section('script-js')
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable with custom settings
+        $('#userTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "searching": true,
+            "order": [[ 4, "desc" ]], // Sort by created date column descending
+            "pageLength": 10,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "emptyTable": "No users available",
+                "info": "Showing _START_ to _END_ of _TOTAL_ users",
+                "infoEmpty": "Showing 0 to 0 of 0 users",
+                "infoFiltered": "(filtered from _MAX_ total users)",
+                "lengthMenu": "Show _MENU_ users per page",
+                "search": "Search users:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
+                }
+            }
+        });
+    });
+</script>
 @endsection

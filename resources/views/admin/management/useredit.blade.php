@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card p-3 shadow-sm rounded">
@@ -59,6 +59,18 @@
                                 @enderror
                             </div>
 
+                            @if(Auth::user()->role == 'Admin')
+                            <div class="mb-3">
+                                <label class="form-label">Role</label>
+                                <select name="role" class="form-control @error('role') is-invalid @enderror">
+                                    <option value="Admin" {{ old('role', $oldData->role) == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="User" {{ old('role', $oldData->role) == 'User' ? 'selected' : '' }}>User</option>
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            @endif
 
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary w-100 rounded shadow-sm">Update

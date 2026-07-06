@@ -1,57 +1,83 @@
 <x-guest-layout>
-                            <div class="text-center mb-4">
-                                <h2 class="fw-bold mb-2 display-6">Reset Password</h2>
-                                <p class="text-muted mb-0 fs-6">Enter your new password below</p>
-                            </div>
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="p-4 p-sm-5">
+            <div class="text-center mb-4">
+                <h2 class="h4 mb-1" style="font-weight: 700; color: #111827;">Reset Password</h2>
+            </div>
 
-                            <form method="POST" action="{{ route('password.store') }}" class="mt-4">
-                                @csrf
-                                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+            <form class="user" method="POST" action="{{ route('password.store') }}">
+                @csrf
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                                <div class="mb-4">
-                                    <label for="email" class="form-label fw-medium mb-2">Email Address</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-light border-end-0 rounded-start-4">
-                                            <i class="fas fa-envelope text-muted"></i>
-                                        </span>
-                                        <input type="email" class="form-control form-control-lg border-start-0 rounded-end-4" 
-                                            id="email" name="email" value="{{ old('email', $request->email) }}" required 
-                                            autofocus placeholder="Enter your email" autocomplete="username">
-                                    </div>
-                                    <x-input-error :messages="$errors->get('email')" class="text-danger small mt-2" />
-                                </div>
+                <div class="form-group mb-3">
+                    <label for="email" class="small text-muted mb-1">Email Address</label>
+                    <input type="email" class="form-control form-control-user" id="email" name="email"
+                        value="{{ old('email', $request->email) }}" required autofocus
+                        placeholder="you@example.com" autocomplete="username">
+                    <x-input-error :messages="$errors->get('email')" class="text-danger small mt-2" />
+                </div>
 
-                                <div class="mb-4">
-                                    <label for="password" class="form-label fw-medium mb-2">New Password</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-light border-end-0 rounded-start-4">
-                                            <i class="fas fa-lock text-muted"></i>
-                                        </span>
-                                        <input type="password" class="form-control form-control-lg border-start-0 rounded-end-4" 
-                                            id="password" name="password" required 
-                                            placeholder="Enter new password" autocomplete="new-password">
-                                    </div>
-                                    <x-input-error :messages="$errors->get('password')" class="text-danger small mt-2" />
-                                </div>
-
-                                <div class="mb-4">
-                                    <label for="password_confirmation" class="form-label fw-medium mb-2">Confirm New Password</label>
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text bg-light border-end-0 rounded-start-4">
-                                            <i class="fas fa-lock text-muted"></i>
-                                        </span>
-                                        <input type="password" class="form-control form-control-lg border-start-0 rounded-end-4" 
-                                            id="password_confirmation" name="password_confirmation" required 
-                                            placeholder="Confirm new password" autocomplete="new-password">
-                                    </div>
-                                    <x-input-error :messages="$errors->get('password_confirmation')" class="text-danger small mt-2" />
-                                </div>
-
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary fw-medium rounded-4 py-1">
-                                        <span class="fs-6">Reset Password</span>
-                                    </button>
-                                </div>
-                            </form>
+                <div class="form-group mb-3">
+                    <label for="password" class="small text-muted mb-1">New Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control form-control-user" id="password" name="password"
+                            required placeholder="Enter new password" autocomplete="new-password">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                                style="border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-color: #dbdbdb;">
+                                <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                            </button>
                         </div>
+                    </div>
+                    <x-input-error :messages="$errors->get('password')" class="text-danger small mt-2" />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="password_confirmation" class="small text-muted mb-1">Confirm New Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control form-control-user" id="password_confirmation"
+                            name="password_confirmation" required placeholder="Confirm new password" autocomplete="new-password">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirm"
+                                style="border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-color: #dbdbdb;">
+                                <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="text-danger small mt-2" />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-user btn-block btn-lg" style="font-weight: 600;">
+                    Reset Password
+                </button>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+                <a class="small text-decoration-none" href="{{ route('login') }}">Back to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const password = document.getElementById('password');
+    const icon = this.querySelector('i');
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
+});
+document.getElementById('togglePasswordConfirm').addEventListener('click', function () {
+    const password = document.getElementById('password_confirmation');
+    const icon = this.querySelector('i');
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
+});
+</script>
 </x-guest-layout>

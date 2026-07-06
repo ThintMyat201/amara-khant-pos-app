@@ -39,6 +39,7 @@ class AdminMiddleware
             return $next($request);
         }
         
-        return abort(403, 'Unauthorized action: Your role is ' . $user->role . ' (DB role: ' . ($dbUser ? $dbUser->role : 'none') . ')');
+        // Non-admin: redirect to Sales instead of 403 (so "remember me" + direct URL give a smooth experience)
+        return redirect()->route('sale.products');
     }
 }

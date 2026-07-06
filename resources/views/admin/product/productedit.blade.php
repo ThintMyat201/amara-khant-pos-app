@@ -9,9 +9,9 @@
                         <input type="hidden" value="{{ $oldData->id }}" name='id'>
                         <div class="card-body">
                             <div class="mb-3">
-                                <div class='text-center mb-2'>
-                                    <img class="img-profile mb-1 w-25" id="output"
-                                        src="{{ asset('images/' . $oldData->image) }}" alt="Product Image">
+                                <div class="product-preview-container mb-2">
+                                    <img class="product-preview-image" id="output"
+                                        src="{{ $oldData->image ? asset('images/' . $oldData->image) : asset('images/default.png') }}" alt="Product Image Preview">
                                 </div>
                                 <input type="file" name="image" accept="image/*"
                                     class="form-control mt-1 @error('image') is-invalid @enderror"

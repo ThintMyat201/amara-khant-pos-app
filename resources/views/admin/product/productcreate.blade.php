@@ -9,8 +9,8 @@
                                 @csrf
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <div class='text-center mb-2'>
-                                            <img class="img-profile mb-1 w-25" id="output">
+                                        <div class="product-preview-container mb-2">
+                                            <img class="product-preview-image" id="output" src="{{ asset('images/default.png') }}" alt="Product Image Preview">
                                         </div>
                                         <input type="file" name="image" accept="image/*" class="form-control mt-1 @error('image') is-invalid @enderror " onchange="loadFile(event)">
                                          @error('image')

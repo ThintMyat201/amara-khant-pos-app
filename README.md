@@ -1,61 +1,193 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛒 Amara Khant POS & Store Management System
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/Database-MySQL%20%7C%20SQLite-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL & SQLite">
+  <img src="https://img.shields.io/badge/Frontend-Bootstrap%204%20%7C%20DataTables-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap & DataTables">
+  <img src="https://img.shields.io/badge/Architecture-PSR--4%20Compliant-00C7B7?style=for-the-badge" alt="PSR-4 Compliant">
+  <img src="https://img.shields.io/badge/Tests-Passing-4c1?style=for-the-badge" alt="Tests Passing">
 </p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Amara Khant POS** is a modern, high-performance Point of Sale and Store Management web application built on **Laravel 12**. Designed for retail stores, boutiques, and fast-paced checkout environments, it provides an intuitive cashier interface, real-time inventory tracking, comprehensive sales reporting, and a robust administrative dashboard.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+With our latest engineering optimizations, the application features **zero N+1 query bottlenecks**, **100% route cacheability**, **database-agnostic analytics queries**, and a strict **PSR-4 compliant model architecture** guaranteed to run seamlessly across local development, Docker containers, and Linux production servers.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Key Features
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 💻 Point of Sale (POS) Terminal & Checkout
+- **Instant Cart Management**: Rapidly add products to cart with real-time stock validation.
+- **Smart Inventory Safeguards**: Automatic checkout disabling for out-of-stock items and dynamic low-stock warning badges (`Stock <= 3`).
+- **Seamless Transaction Processing**: Immutable sales record generation with instant receipt calculation and store session tracking.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📊 Real-Time Administrative Dashboard
+- **Aggregated Financial Analytics**: Daily revenue tracking, monthly earnings breakdowns, and annual projections powered by high-speed single-query SQL aggregations.
+- **Interactive Visualizations**: Clean graphical representations of sales performance using integrated chart components.
+- **User & Store Statistics**: Immediate visibility into active customer registrations, cashier activities, and inventory alerts.
 
-## Laravel Sponsors
+### 📦 Product & Category Management
+- **Full Inventory Control**: Create, update, view, and delete products and categories with structured form validation.
+- **Image Preview & Scaling**: Automatic thumbnail generation and responsive image container scaling with `object-fit: contain/cover` styling.
+- **Advanced Filtering**: Rapidly filter products by category, stock status, or custom low-stock thresholds.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 👥 User Registration & Approval Workflow
+- **Multi-Tier Role Access**: Clean segregation between administrative controllers (`Admin`) and store operators (`User`).
+- **Interactive Request Management**: Dedicated registration request review workflow with modal-based approvals, rejection justifications, and admin notes.
+- **SweetAlert2 Integrations**: Smooth modal transitions, confirmation dialogs for critical actions, and intuitive user feedback.
 
-### Premium Partners
+### ⚡ Enterprise Performance & DevOps Ready
+- **Route & View Caching**: Fully controller-routed architecture enabling 0-error execution of `php artisan route:cache` and `php artisan view:cache`.
+- **Driver-Agnostic SQL**: High-performance dashboard queries compatible with both MySQL (Production) and SQLite (In-Memory Automated Testing).
+- **Automated Feature Suite**: Integrated PHPUnit test suite validating authentication flows, dashboard analytics, and core transaction logic.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🏗️ System Architecture & Tech Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Layer | Technologies Used |
+| :--- | :--- |
+| **Backend Framework** | Laravel 12.x, PHP 8.2+, Eloquent ORM |
+| **Frontend UI** | Bootstrap 4, Customized Theme (`amara-khant-theme.css`), FontAwesome 6 |
+| **Interactive JS** | jQuery, DataTables (with custom empty table DOM styling), SweetAlert2, Chart.js |
+| **Database Support** | MySQL / MariaDB (Production), SQLite (Testing & Local Dev) |
+| **Testing & CI** | PHPUnit, Laravel Feature & Unit Test Suites |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🚀 Quick Start & Installation
 
-## Security Vulnerabilities
+### 1. Prerequisites
+Ensure your development environment meets the following requirements:
+- **PHP** >= 8.2
+- **Composer** >= 2.x
+- **Node.js** >= 18.x & **NPM**
+- **MySQL** / **MariaDB** (or SQLite)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Clone & Install Dependencies
+```bash
+# Clone the repository
+git clone https://github.com/ThintMyat201/amara-khant-pos-app.git
+cd amara-khant-pos-app
 
-## License
+# Install PHP composer dependencies
+composer install
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Install frontend NPM packages & compile assets
+npm install
+npm run build
+```
+
+### 3. Environment Setup & Configuration
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Generate application encryption key
+php artisan key:generate
+```
+
+Configure your database credentials in the `.env` file:
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=amara_khant_pos
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+### 4. Database Migrations & Seeding
+```bash
+# Run database migrations and seed default administrative user / initial data
+php artisan migrate --seed
+```
+
+### 5. Launch the Application
+You can start the server manually or use our built-in utility scripts:
+```bash
+# Start via standard Laravel development server
+php artisan serve
+
+# Or use our automated POS launch script
+./scripts/start-pos.sh
+```
+Access the application in your browser at: `http://localhost:8000`
+
+---
+
+## 🧪 Running Automated Tests
+
+The application includes an automated test suite verifying core business logic and dashboard aggregation performance:
+```bash
+# Run the complete test suite (uses in-memory SQLite database automatically)
+php artisan test
+
+# Run specifically targeted feature tests
+php artisan test --filter=DashboardTest
+```
+
+---
+
+## 📁 Clean Directory Structure
+
+```text
+amara-khant-pos-app/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── admin/          # Admin domain controllers (Dashboard, Product, Category, Sale, Report)
+│   │   │   └── Auth/           # Breeze authentication & registration controllers
+│   │   └── Middleware/         # AdminMiddleware & role verification
+│   └── Models/                 # PSR-4 PascalCase models (Cart, Category, Product, Sale, StoreSession)
+├── docs/                       # Comprehensive technical guides & deployment documentation
+├── public/
+│   ├── assets/                 # Cleaned static CSS/JS themes & vendor libraries
+│   └── images/                 # Product inventory images & upload storage
+├── resources/
+│   └── views/
+│       ├── admin/              # Blade templates (Dashboard, Product lists, POS sale terminal, User management)
+│       └── layouts/            # Master layout wrappers & navigation headers
+├── scripts/                    # Shell utilities for automated server checks & deployment
+└── tests/
+    ├── Feature/                # Automated feature tests (DashboardTest, Authentication, Registration)
+    └── Unit/                   # Unit test assertions
+```
+
+---
+
+## 📚 Documentation & DevOps Scripts
+
+For advanced server readiness, deployment procedures, and testing workflows, refer to our dedicated guides in the `docs/` directory:
+- [📖 Quick Start & Deployment Guide](docs/QUICK_START_DEPLOYMENT.md)
+- [📖 Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+- [📖 Registration System Guide](docs/REGISTRATION_SYSTEM_GUIDE.md)
+- [📖 Server Readiness & Option B Deployment](docs/SERVER_READINESS_AND_OPTION_B.md)
+
+Our utility scripts in `scripts/` automate routine operations:
+- `./scripts/check-status.sh`: Verifies server health, database connectivity, and configuration caching.
+- `./scripts/deploy.sh`: Production deployment pipeline with route/view optimization.
+- `./scripts/start-pos.sh`: One-click local development startup.
+
+---
+
+## 🔒 Security & Performance Best Practices
+
+- **Route & View Caching**: In production, execute `php artisan optimize` to cache all routes, configuration files, and compiled Blade views for maximum responsiveness.
+- **CSRF & SQL Injection Protection**: All form submissions are secured via Laravel `@csrf` tokens, and all database interactions utilize Eloquent ORM parameter binding.
+- **Timezone Standardization**: Application time is globally synchronized to `Asia/Yangon` in `config/app.php`, eliminating runtime timestamp discrepancies across financial transactions.
+
+---
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+<p align="center">
+  Made with ❤️ by the <b>Amara Khant Development Team</b>
+</p>

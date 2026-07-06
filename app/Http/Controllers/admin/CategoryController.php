@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\category;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -11,23 +11,23 @@ class CategoryController extends Controller
 {
 
     public function categoryCreateView(){
-         $categorylist=category::select('id','name','created_at')
+         $categorylist=Category::select('id','name','created_at')
         ->orderBy('created_at','desc')
         ->paginate(7);
-        return view('admin.product.categorycreate',compact('categorylist'));
+        return view('admin.category.categorycreate',compact('categorylist'));
     }
 
     // put category data
     public function categoryCreateButton(Request $request){
        $this->checkValidation($request);
         $data=$this->getData($request);
-        category::create($data);
+        Category::create($data);
         Alert::success('Success Title', 'Success Message');
         return back();
     }
 
     public function categoryDeleteButton($id){
-         category::where('id',$id)->delete();
+         Category::where('id',$id)->delete();
          return back();
     }
 

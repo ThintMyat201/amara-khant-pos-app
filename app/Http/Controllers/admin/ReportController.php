@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\storeSession;
+use App\Models\StoreSession;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -11,7 +12,7 @@ class ReportController extends Controller
     public function generateReport()
     {
         // Get the latest closed session
-        $session = storeSession::where('closed_at', '!=', null)
+        $session = StoreSession::where('closed_at', '!=', null)
                          ->latest('closed_at')
                          ->with(['sales.product'])
                          ->first();

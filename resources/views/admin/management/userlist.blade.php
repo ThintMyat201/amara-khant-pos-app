@@ -31,8 +31,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (count($userData) != 0)
-
                                 @foreach ($userData as $item)
                                     <tr>
                                         <td class="border text-center">{{ $item->id }}</td>
@@ -59,17 +57,7 @@
                                             </a>
                                         </td>
                                     </tr>
-
                                 @endforeach
-
-                            @else
-                                <tr>
-                                    <td colspan="6" class="border text-center py-5">
-                                        <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
-                                        <h5 class="text-muted">There is no user</h5>
-                                    </td>
-                                </tr>
-                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -93,7 +81,7 @@
             "pageLength": 10,
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
             "language": {
-                "emptyTable": "No users available",
+                "emptyTable": '<div class="py-4 text-center"><i class="fas fa-users fa-3x text-gray-300 mb-3 d-block"></i><h5 class="text-muted">There is no user</h5></div>',
                 "info": "Showing _START_ to _END_ of _TOTAL_ users",
                 "infoEmpty": "Showing 0 to 0 of 0 users",
                 "infoFiltered": "(filtered from _MAX_ total users)",

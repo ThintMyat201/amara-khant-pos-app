@@ -2,13 +2,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\SaleController;
 use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\AdminProfileController;
-use App\Http\Controllers\admin\ChangePasswordController;
 use App\Http\Controllers\admin\RegistrationRequestController;
 use App\Http\Controllers\admin\NotificationController;
+use App\Http\Controllers\admin\ReportController;
 
 
 
@@ -32,7 +31,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'adminMiddleware', 'veri
     });
     
     // Report Generation
-    Route::get('/generate-report', [App\Http\Controllers\ReportController::class, 'generateReport'])->name('generateReport');
+    Route::get('/generate-report', [ReportController::class, 'generateReport'])->name('generateReport');
 
     Route::group(['prefix'=>'category'],function(){
         Route::get('create/view',[CategoryController::class,'categoryCreateView'])->name('categoryCreateView');

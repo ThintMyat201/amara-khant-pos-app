@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\product;
-use App\Models\category;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -11,13 +11,13 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ProductController extends Controller
 {
      public function productCreateView(){
-        $categories=category::select('id','name')->get();
+        $categories=Category::select('id','name')->get();
         return view('admin.product.productcreate',compact('categories'));
     }
 
     public function productListView($action='default'){
 
-        $product=product::select('products.id','products.name','products.price','products.image','products.stock','products.category_id','categories.name as category_name')
+        $product=Product::select('products.id','products.name','products.price','products.image','products.stock','products.category_id','categories.name as category_name')
                 ->leftJoin('categories','products.category_id','categories.id')
                 ->when( $action=='lowAmt',function($query){
                     $query->where('products.stock','<=',3);
@@ -29,8 +29,8 @@ class ProductController extends Controller
     }
 
     public function productEditView($id){
-        $oldData=product::where('id',$id)->first();
-        $categories=category::get();
+        $oldData=Product::where('id',$id)->first();
+        $categories=Category::get();
         return view('admin.product.productedit',compact('oldData','categories'));
     }
 
@@ -44,7 +44,7 @@ class ProductController extends Controller
             $data['image'] = $fileName;
         }
 
-        product::create($data);
+        Product::create($data);
         Alert::success('Success Title', 'Product created successfully!');
         return back();
     }
@@ -52,12 +52,12 @@ class ProductController extends Controller
     // product delete function
 
     public function productDelete($id){
-        $oldImageName = product::where('id', $id)->value('image');
+        $oldImageName = Product::where('id', $id)->value('image');
         $imagePath = public_path('images/' . $oldImageName);
         if ($oldImageName && file_exists($imagePath)) {
             unlink($imagePath);
         }
-        product::where('id', $id)->delete();
+        Product::where('id', $id)->delete();
         return back();
     }
 
@@ -66,7 +66,7 @@ class ProductController extends Controller
         $data = $this->getData($request);
 
         // Get old image name from DB
-        $oldImageName = product::where('id', $request->id)->value('image');
+        $oldImageName = Product::where('id', $request->id)->value('image');
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
@@ -80,7 +80,7 @@ class ProductController extends Controller
             $data['image'] = $oldImageName;
         }
 
-        product::where('id', $request->id)->update($data);
+        Product::where('id', $request->id)->update($data);
         Alert::success('Success Title', 'Product updated successfully!');
         return to_route('productListView');
     }

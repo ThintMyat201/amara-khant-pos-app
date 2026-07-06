@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\cart;
-use App\Models\sale;
-use App\Models\product;
-use App\Models\storeSession;
+use App\Models\Cart;
+use App\Models\Sale;
+use App\Models\Product;
+use App\Models\StoreSession;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +15,7 @@ class SaleController extends Controller
 {
 
     public function cartView(){
-        $cartData=cart::select('carts.id as cart_id','carts.quantity','products.image','products.name','products.price','products.id as product_id','products.category_id')
+        $cartData=Cart::select('carts.id as cart_id','carts.quantity','products.image','products.name','products.price','products.id as product_id','products.category_id')
                 ->leftJoin('products','carts.product_id','products.id')
                 ->where('carts.user_id',Auth::user()->id)
                 ->get();
@@ -25,13 +25,13 @@ class SaleController extends Controller
 
      public function saleProductView()
     {
-        $product = product::select('products.id','products.name','products.price','products.description','products.image','products.stock','products.category_id','categories.name as category_name')
+        $product = Product::select('products.id','products.name','products.price','products.description','products.image','products.stock','products.category_id','categories.name as category_name')
                 ->leftJoin('categories','products.category_id','categories.id')
                 ->orderBy('products.created_at','desc')
                 ->get();
 
         // Fetch cart for current user
-        $cart = cart::where('user_id', Auth::id())->get();
+        $cart = Cart::where('user_id', Auth::id())->get();
 
         return view('admin.sale.saleproduct', compact('product', 'cart'));
     }
@@ -42,7 +42,7 @@ class SaleController extends Controller
         $productId = $request->productid;
 
         // Check if the product is already in the user's cart
-        $existingCartItem = cart::where('user_id', $userId)
+        $existingCartItem = Cart::where('user_id', $userId)
             ->where('product_id', $productId)
             ->first();
 
@@ -53,7 +53,7 @@ class SaleController extends Controller
         }
 
         // Product is not in the cart, add it
-        cart::create([
+        Cart::create([
             'user_id' => $userId,
             'product_id' => $productId,
             // You might need to add other fields like quantity, price, etc.
@@ -63,7 +63,7 @@ class SaleController extends Controller
     }
 
     public function cartDelete($id){
-       cart::where('id', $id)->delete();
+       Cart::where('id', $id)->delete();
        return back();
     }
 
@@ -78,14 +78,14 @@ class SaleController extends Controller
         }
 
         // Get the current open store session
-        $session = storeSession::whereNull('closed_at')->latest()->first();
+        $session = StoreSession::whereNull('closed_at')->latest()->first();
 
         if (!$session) {
             return response()->json(['status' => 'error', 'message' => 'No open store session!'], 400);
         }
 
         foreach ($request->cart as $item) {
-            $product = product::find($item['product_id']);
+            $product = Product::find($item['product_id']);
             if (!$product || $product->stock < $item['quantity']) {
                 return response()->json([
                     'status' => 'error',
@@ -94,7 +94,7 @@ class SaleController extends Controller
             }
 
             // Create sale record
-            sale::create([
+            Sale::create([
                 'user_id' => $item['user_id'],
                 'product_id' => $item['product_id'],
                 'description'=>$item['description'],
@@ -111,7 +111,7 @@ class SaleController extends Controller
         // Destroy all cart data for the user
         $userId = $request->cart[0]['user_id'] ?? null;
         if ($userId) {
-            cart::where('user_id', $userId)->delete();
+            Cart::where('user_id', $userId)->delete();
         }
 
         return response()->json(['status' => 'success']);
@@ -119,7 +119,7 @@ class SaleController extends Controller
 
     public function saleListView(Request $request)
     {
-        $query = sale::select(
+        $query = Sale::select(
                 'products.name as product_name',
                 'products.price',
                 'sales.quantity',
@@ -167,10 +167,10 @@ class SaleController extends Controller
     public function openStore()
     {
         // Check if already open
-        if (storeSession::whereNull('closed_at')->exists()) {
+        if (StoreSession::whereNull('closed_at')->exists()) {
             return back()->with('error', 'Store is already open!');
         }
-        storeSession::create([
+        StoreSession::create([
             'opened_at' => now(),
             'opened_by' => Auth::id(),
         ]);
@@ -178,7 +178,7 @@ class SaleController extends Controller
     }
     public function closeStore()
     {
-        $session = storeSession::whereNull('closed_at')->latest()->first();
+        $session = StoreSession::whereNull('closed_at')->latest()->first();
         if (!$session) {
             return back()->with('error', 'No open store session!');
         }
@@ -191,16 +191,16 @@ class SaleController extends Controller
 
     public function saleManagementView()
     {
-        $cart = cart::get();
-        $session = storeSession::latest('opened_at')->first(); // Fetch latest session
-        $storeOpen = storeSession::whereNull('closed_at')->exists();
+        $cart = Cart::get();
+        $session = StoreSession::latest('opened_at')->first(); // Fetch latest session
+        $storeOpen = StoreSession::whereNull('closed_at')->exists();
 
         $sessions = collect();
         $totalAmount = 0;
 
         if ($session) {
             // Get all sales for the session to calculate total
-            $totalAmount = sale::where('store_session_id', $session->id)->sum('total');
+            $totalAmount = Sale::where('store_session_id', $session->id)->sum('total');
             
             // Paginate sales for the latest session
             $sales = $session->sales()->with('product')->paginate(10);

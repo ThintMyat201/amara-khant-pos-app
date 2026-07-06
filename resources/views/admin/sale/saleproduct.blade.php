@@ -52,55 +52,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (count($product) != 0)
-                                @foreach ($product as $item)
-                                    <tr>
-                                        <td class="border text-center">
-                                            <img src="{{ asset('images/' . $item->image) }}"
-                                                class="img-thumbnail rounded shadow-sm"
-                                                style="width:80px; max-width:100%; height:auto;" alt="{{ $item->name }}">
-                                        </td>
-                                        <td class="border font-weight-bold">{{ $item->name }}</td>
-                                        <td class="border">{{ $item->description }}</td>
-                                        <td class="border text-center">
-                                            @if ($item->stock == 0)
-                                                <span class="badge badge-danger px-3 py-2">
-                                                    <i class="fas fa-times-circle"></i> Out of Stock
-                                                </span>
-                                            @else
-                                                <span class="badge badge-info px-3 py-2">{{ $item->stock }}</span>
-                                                @if ($item->stock <= 3)
-                                                    <br>
-                                                    <span class="badge badge-warning mt-1">
-                                                        <i class="fas fa-exclamation-triangle"></i> Low Stock
-                                                    </span>
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td class="border text-center text-primary font-weight-bold">{{ number_format($item->price, 0) }} MMK</td>
-                                        <td class="border text-center">
-                                            <form action="{{ route('addCart') }}" method='post'>
-                                                @csrf
-                                                <input type='hidden' name="userid" value="{{ Auth::user()->id }}">
-                                                <input type='hidden' name="productid" value="{{ $item->id }}">
-                                                <button type='submit'
-                                                    class="btn btn-sm btn-outline-danger shadow-sm d-inline-flex align-items-center justify-content-center"
-                                                    title="Add to Cart"
-                                                    @if($item->stock == 0) disabled @endif>
-                                                    <i class="fa-solid fa-cart-plus"></i><span class="d-none d-md-inline ml-1">Add to Cart</span>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
+                            @foreach ($product as $item)
                                 <tr>
-                                    <td colspan="6" class="border text-center py-5">
-                                        <i class="fas fa-box-open fa-3x text-gray-300 mb-3 d-block"></i>
-                                        <h5 class="text-muted">There are no products</h5>
+                                    <td class="border text-center">
+                                        <img src="{{ asset('images/' . $item->image) }}"
+                                            class="img-thumbnail rounded shadow-sm"
+                                            style="width:80px; max-width:100%; height:auto;" alt="{{ $item->name }}">
+                                    </td>
+                                    <td class="border font-weight-bold">{{ $item->name }}</td>
+                                    <td class="border">{{ $item->description }}</td>
+                                    <td class="border text-center">
+                                        @if ($item->stock == 0)
+                                            <span class="badge badge-danger px-3 py-2">
+                                                <i class="fas fa-times-circle"></i> Out of Stock
+                                            </span>
+                                        @else
+                                            <span class="badge badge-info px-3 py-2">{{ $item->stock }}</span>
+                                            @if ($item->stock <= 3)
+                                                <br>
+                                                <span class="badge badge-warning mt-1">
+                                                    <i class="fas fa-exclamation-triangle"></i> Low Stock
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td class="border text-center text-primary font-weight-bold">{{ number_format($item->price, 0) }} MMK</td>
+                                    <td class="border text-center">
+                                        <form action="{{ route('addCart') }}" method='post'>
+                                            @csrf
+                                            <input type='hidden' name="userid" value="{{ Auth::user()->id }}">
+                                            <input type='hidden' name="productid" value="{{ $item->id }}">
+                                            <button type='submit'
+                                                class="btn btn-sm btn-outline-danger shadow-sm d-inline-flex align-items-center justify-content-center"
+                                                title="Add to Cart"
+                                                @if($item->stock == 0) disabled @endif>
+                                                <i class="fa-solid fa-cart-plus"></i><span class="d-none d-md-inline ml-1">Add to Cart</span>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
-                            @endif
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -125,7 +116,7 @@
                 { "orderable": false, "targets": [0, 5] } // Disable sorting on Image and Action columns
             ],
             "language": {
-                "emptyTable": "No products available",
+                "emptyTable": '<div class="py-4 text-center"><i class="fas fa-box-open fa-3x text-gray-300 mb-3 d-block"></i><h5 class="text-muted">There are no products</h5></div>',
                 "info": "Showing _START_ to _END_ of _TOTAL_ products",
                 "infoEmpty": "Showing 0 to 0 of 0 products",
                 "infoFiltered": "(filtered from _MAX_ total products)",

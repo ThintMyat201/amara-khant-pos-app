@@ -101,7 +101,6 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Expose ports for standard HTTP and Render default (10000)
 EXPOSE 80 10000
 
-# Set entrypoint & default command
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["apache2-foreground"]
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 

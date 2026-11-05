@@ -8,7 +8,7 @@ use App\Http\Controllers\admin\DashboardController;
 
 
 
-require_once __DIR__.'/admin.php';
+require __DIR__.'/admin.php';
 
 Route::get('/', function () {
     return view('auth.login');

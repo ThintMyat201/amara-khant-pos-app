@@ -21,13 +21,15 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::create([
-            'name'=>'Thint Myat Htet Myet Shwe',
-            'email'=>'admin123@gmail.com',
-            'password'=>Hash::make('admin123!@#'),
-            'role'=>'Admin',
-            'address'=>'Jalan PBS 14/2, Taman Perindustrian Bukit Serdang, 43300 Seri Kembangan, Selangor',
-            'phone'=>'09880001025'
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin123@gmail.com'],
+            [
+                'name' => 'Thint Myat Htet Myet Shwe',
+                'password' => Hash::make('admin123!@#'),
+                'role' => 'Admin',
+                'address' => 'Jalan PBS 14/2, Taman Perindustrian Bukit Serdang, 43300 Seri Kembangan, Selangor',
+                'phone' => '09880001025'
+            ]
+        );
     }
 }

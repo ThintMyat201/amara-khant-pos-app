@@ -31,5 +31,16 @@ class DatabaseSeeder extends Seeder
                 'phone' => '09880001025'
             ]
         );
+
+        User::firstOrCreate(
+            ['email' => 'demo@pos.com'],
+            [
+                'name' => 'Demo Admin',
+                'password' => Hash::make('demo123!@#'),
+                'role' => 'Admin',
+                'address' => 'Jalan PBS 14/2, Taman Perindustrian Bukit Serdang, 43300 Seri Kembangan, Selangor',
+                'phone' => '09880001025'
+            ]
+        );
     }
 }

@@ -22,6 +22,10 @@
                         aria-describedby="emailHelp"
                         placeholder="you@example.com"
                         name="email"
+                        autocomplete="username"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
                         autofocus
                         value="{{ old('email') }}"
                     >
@@ -80,6 +84,17 @@
                     style="font-weight: 600;"
                 >
                     Login
+                </button>
+            </form>
+
+            <form method="POST" action="{{ route('login.demo') }}" class="mt-3">
+                @csrf
+                <button
+                    type="submit"
+                    class="btn btn-outline-primary btn-user btn-block btn-lg"
+                    style="font-weight: 600; border-radius: 8px; padding: 12px; font-size: 1rem;"
+                >
+                    <i class="fas fa-bolt mr-2" aria-hidden="true"></i>Quick Demo Access (Admin)
                 </button>
             </form>
 

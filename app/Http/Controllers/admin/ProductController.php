@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -39,8 +40,12 @@ class ProductController extends Controller
         $data = $this->getData($request);
 
         if ($request->hasFile('image')) {
+            $destinationPath = public_path('images');
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
+            }
             $fileName = uniqid() . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('images'), $fileName);
+            $request->file('image')->move($destinationPath, $fileName);
             $data['image'] = $fileName;
         }
 
@@ -69,12 +74,16 @@ class ProductController extends Controller
         $oldImageName = Product::where('id', $request->id)->value('image');
 
         if ($request->hasFile('image')) {
+            $destinationPath = public_path('images');
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
+            }
             // Delete old image if exists
-            if ($oldImageName && file_exists(public_path('images/' . $oldImageName))) {
-                unlink(public_path('images/' . $oldImageName));
+            if ($oldImageName && file_exists($destinationPath . '/' . $oldImageName)) {
+                unlink($destinationPath . '/' . $oldImageName);
             }
             $fileName = uniqid() . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('images'), $fileName);
+            $request->file('image')->move($destinationPath, $fileName);
             $data['image'] = $fileName;
         } else {
             $data['image'] = $oldImageName;

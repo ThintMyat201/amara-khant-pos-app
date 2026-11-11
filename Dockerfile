@@ -90,10 +90,11 @@ RUN mkdir -p \
         storage/framework/sessions \
         storage/framework/views \
         storage/logs \
+        storage/app/public/images \
         bootstrap/cache \
         public/images \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
 
 # Copy entrypoint script and ensure executable
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

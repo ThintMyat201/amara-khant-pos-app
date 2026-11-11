@@ -40,10 +40,7 @@ class ProductController extends Controller
         $data = $this->getData($request);
 
         if ($request->hasFile('image')) {
-            $destinationPath = public_path('images');
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true);
-            }
+            $destinationPath = $this->resolveWritableImageDirectory();
             $fileName = uniqid() . $request->file('image')->getClientOriginalName();
             $request->file('image')->move($destinationPath, $fileName);
             $data['image'] = $fileName;
@@ -58,10 +55,7 @@ class ProductController extends Controller
 
     public function productDelete($id){
         $oldImageName = Product::where('id', $id)->value('image');
-        $imagePath = public_path('images/' . $oldImageName);
-        if ($oldImageName && file_exists($imagePath)) {
-            unlink($imagePath);
-        }
+        $this->deleteImageFile($oldImageName);
         Product::where('id', $id)->delete();
         return back();
     }
@@ -74,14 +68,8 @@ class ProductController extends Controller
         $oldImageName = Product::where('id', $request->id)->value('image');
 
         if ($request->hasFile('image')) {
-            $destinationPath = public_path('images');
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true);
-            }
-            // Delete old image if exists
-            if ($oldImageName && file_exists($destinationPath . '/' . $oldImageName)) {
-                unlink($destinationPath . '/' . $oldImageName);
-            }
+            $destinationPath = $this->resolveWritableImageDirectory();
+            $this->deleteImageFile($oldImageName);
             $fileName = uniqid() . $request->file('image')->getClientOriginalName();
             $request->file('image')->move($destinationPath, $fileName);
             $data['image'] = $fileName;
@@ -92,6 +80,47 @@ class ProductController extends Controller
         Product::where('id', $request->id)->update($data);
         Alert::success('Success Title', 'Product updated successfully!');
         return to_route('productListView');
+    }
+
+    private function resolveWritableImageDirectory(): string
+    {
+        $candidates = [
+            public_path('images'),
+            storage_path('app/public/images'),
+            sys_get_temp_dir() . '/amara_images',
+        ];
+
+        foreach ($candidates as $path) {
+            if (!File::exists($path)) {
+                @File::makeDirectory($path, 0777, true, true);
+            }
+            @chmod($path, 0777);
+            if (is_dir($path) && is_writable($path)) {
+                return $path;
+            }
+        }
+
+        return sys_get_temp_dir();
+    }
+
+    private function deleteImageFile(?string $fileName): void
+    {
+        if (!$fileName) {
+            return;
+        }
+
+        $paths = [
+            public_path('images/' . $fileName),
+            storage_path('app/public/images/' . $fileName),
+            sys_get_temp_dir() . '/amara_images/' . $fileName,
+            sys_get_temp_dir() . '/' . $fileName,
+        ];
+
+        foreach ($paths as $filePath) {
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            }
+        }
     }
 
     public function getData($request){

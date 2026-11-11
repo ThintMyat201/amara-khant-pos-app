@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,12 +58,13 @@ class AdminProfileController extends Controller
         $oldImageName = User::where('id', Auth::user()->id)->value('image');
 
         if ($request->hasFile('image')) {
+            $destinationPath = $this->resolveWritableImageDirectory();
             // Delete old image if exists
-            if ($oldImageName && file_exists(public_path('images/' . $oldImageName))) {
-                unlink(public_path('images/' . $oldImageName));
+            if ($oldImageName && file_exists($destinationPath . '/' . $oldImageName)) {
+                @unlink($destinationPath . '/' . $oldImageName);
             }
             $fileName = uniqid() . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('images'), $fileName);
+            $request->file('image')->move($destinationPath, $fileName);
             $data['image'] = $fileName;
         } else {
             $data['image'] = $oldImageName;
@@ -73,6 +75,27 @@ class AdminProfileController extends Controller
 
 
         return redirect()->route('adminProfile');
+   }
+
+   private function resolveWritableImageDirectory(): string
+   {
+       $candidates = [
+           public_path('images'),
+           storage_path('app/public/images'),
+           sys_get_temp_dir() . '/amara_images',
+       ];
+
+       foreach ($candidates as $path) {
+           if (!File::exists($path)) {
+               @File::makeDirectory($path, 0777, true, true);
+           }
+           @chmod($path, 0777);
+           if (is_dir($path) && is_writable($path)) {
+               return $path;
+           }
+       }
+
+       return sys_get_temp_dir();
    }
 
    public function deleteProfile(Request $request)
